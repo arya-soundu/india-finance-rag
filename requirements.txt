@@ -1,0 +1,43 @@
+# ============================================================
+# INDIA FINANCE RAG — ALL REQUIRED PACKAGES
+# ============================================================
+# Install with: pip install -r requirements.txt
+
+# ── LLM & Agent Framework ──────────────────────────────────
+langchain
+langchain-community
+langchain-groq
+
+# ── Vector Database ────────────────────────────────────────
+chromadb
+
+# ── Embeddings (runs locally, no API key) ──────────────────
+sentence-transformers
+
+# ── Indian Market Data ─────────────────────────────────────
+yfinance
+pandas
+numpy
+
+# ── PDF & Web Scraping ─────────────────────────────────────
+pdfplumber
+requests
+beautifulsoup4
+lxml
+
+# ── Evaluation ─────────────────────────────────────────────
+ragas
+datasets
+
+# ── UI & API ───────────────────────────────────────────────
+streamlit
+fastapi
+uvicorn
+
+# ── Web Search Agent ───────────────────────────────────────
+tavily-python
+
+# ── Utilities ──────────────────────────────────────────────
+python-dotenv
+tqdm
+plotly
