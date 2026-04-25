@@ -48,7 +48,7 @@ load_dotenv()
 # ============================================================
 
 st.set_page_config(
-    page_title="India Finance RAG",
+    page_title="Vitta-Mitra: Your Financial Friend",
     page_icon="🇮🇳",
     layout="wide",             # Use full width
     initial_sidebar_state="expanded"
@@ -91,11 +91,14 @@ st.markdown("""
     /* Source citation box */
     .source-box {
         background-color: #e8f0fe;
+        color: #202124;  /* Explicit dark text for readability */
         border-left: 4px solid #1a73e8;
-        padding: 8px 12px;
-        margin: 4px 0;
-        border-radius: 0 8px 8px 0;
-        font-size: 0.85em;
+        padding: 10px 14px;
+        margin: 6px 0;
+        border-radius: 4px 8px 8px 4px;
+        font-size: 0.9em;
+        line-height: 1.4;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
     /* Confidence indicator */
@@ -145,12 +148,11 @@ def load_retriever():
     - Without this, every message reload would re-load the model!
     """
     try:
-        # Detect Colab vs local
-        try:
-            import google.colab
+        # detectar Colab vs local
+        if 'google.colab' in sys.modules:
             chroma_path = "/content/drive/MyDrive/Finance_RAG/finrag_db"
-        except ImportError:
-            chroma_path = "./finrag_db"
+        else:
+            chroma_path = None  # Let get_retriever handle the default absolute path
 
         retriever = get_retriever(chroma_path=chroma_path, use_reranker=True)
         return retriever, None
@@ -228,13 +230,14 @@ if 'messages' not in st.session_state:
     st.session_state.messages.append({
         'role':       'assistant',
         'content':    (
-            "Namaste! 🇮🇳 I'm your India Finance RAG assistant.\n\n"
-            "I can answer questions about:\n"
-            "- **Indian companies**: Reliance, TCS, Infosys, HDFC Bank, ICICI Bank\n"
-            "- **SEBI regulations**: LODR, Insider Trading, ICDR\n"
-            "- **Financial calculations**: P/E ratio, CAGR, margins\n"
-            "- **Live market data**: Current prices, recent news\n\n"
-            "Ask me anything about Indian finance!"
+            "Namaste! 🇮🇳 I am **Vitta-Mitra**, your intelligent financial companion.\n\n"
+            "I'm here to help you navigate the complex world of Indian finance using **verified facts** from official sources.\n\n"
+            "I can assist you with:\n"
+            "- **Regulation Decoding**: SEBI (LODR/PIT) and RBI Master Directions.\n"
+            "- **Tax Planning**: Slabs, TDS, and 80C deductions.\n"
+            "- **Market Reality**: Live prices and performance for top Indian companies.\n"
+            "- **Analyst Math**: Accurate financial ratios and growth calculations.\n\n"
+            "What can we learn together today?"
         ),
         'agent':      'direct',
         'confidence': 1.0,
@@ -247,9 +250,16 @@ if 'messages' not in st.session_state:
 # ============================================================
 
 with st.sidebar:
-    st.title("🇮🇳 India Finance RAG")
-    st.caption("Powered by Groq Llama3 + ChromaDB")
-
+    # ── Brand Identity ─────────────────────────────
+    st.image("C:/Users/sriso/.gemini/antigravity/brain/5f7bc8af-69ec-4a9b-a1a6-8e279993a0a6/vitta_mitra_growth_logo_1777125272114.png")
+    st.title("Vitta-Mitra 🇮🇳")
+    st.markdown("""
+    <div style="margin-top: -15px; margin-bottom: 20px;">
+        <i>vitta (Finance) + mitra (Friend)</i><br>
+        <b>Bridging the Literacy Gap.</b>
+    </div>
+    """, unsafe_allow_html=True)
+    
     st.divider()
 
     # Load retriever
@@ -287,14 +297,14 @@ with st.sidebar:
     filter_company = st.selectbox(
         "Filter by company",
         ["All companies", "Reliance Industries", "Tata Consultancy Services",
-         "Infosys", "HDFC Bank", "ICICI Bank", "SEBI", "RBI"],
-        help="Restrict search to one company's documents"
+         "Infosys", "HDFC Bank", "ICICI Bank", "SEBI", "RBI", "Income Tax"],
+        help="Restrict search to one domain's documents"
     )
 
     filter_type = st.selectbox(
         "Filter by document type",
         ["All types", "company_overview", "sebi_regulation",
-         "annual_report_pdf", "rbi_policy"],
+         "annual_report_pdf", "rbi_policy", "tax_regulation"],
         help="Restrict search to one document type"
     )
 
@@ -316,10 +326,11 @@ with st.sidebar:
     sample_questions = [
         "What is TCS's revenue?",
         "Explain SEBI LODR regulations",
+        "What are the income tax slabs for FY 2024-25?",
         "Calculate P/E if EPS is ₹80 and price is ₹3200",
         "What are HDFC Bank's key financial metrics?",
         "What does SEBI say about insider trading?",
-        "Compare Infosys and TCS business models",
+        "What are the 80C tax deduction limits?",
     ]
 
     for q in sample_questions:
@@ -394,23 +405,13 @@ for msg in st.session_state.messages:
 
 # ── Handle injected sample questions ──────────────────────
 if 'inject_query' in st.session_state:
-    user_query = st.session_state.pop('inject_query')
-    # Process it (same as if user typed it)
-    st.session_state.messages.append({
-        'role':    'user',
-        'content': user_query
-    })
-    # Will be processed below
-
-
-# ── Chat input box ─────────────────────────────────────────
-user_input = st.chat_input(
-    "Ask about Indian finance, stocks, SEBI regulations...",
-    key="chat_input"
-)
-
-# Use either typed input or injected question
-query_to_process = user_input
+    query_to_process = st.session_state.pop('inject_query')
+else:
+    # ── Chat input box ─────────────────────────────────────────
+    query_to_process = st.chat_input(
+        "Ask about Indian finance, stocks, SEBI regulations...",
+        key="chat_input"
+    )
 
 # Process new query
 if query_to_process:
@@ -433,13 +434,13 @@ if query_to_process:
             else filter_type
         )
 
-        # Override web search setting
-        if not use_web_search:
-            os.environ['TAVILY_API_KEY'] = ''
-
         # Process the query through our agent pipeline
         try:
-            result = process_query(query_to_process, retriever)
+            result = process_query(
+                query_to_process, 
+                retriever, 
+                use_web_search=use_web_search
+            )
             answer     = result.get('answer', 'No answer generated')
             sources    = result.get('sources', [])
             confidence = result.get('confidence', 0.0)
