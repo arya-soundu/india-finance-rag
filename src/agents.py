@@ -47,13 +47,18 @@ import json
 import logging
 import subprocess
 import tempfile
+import sys
 from typing import Optional
 
 from langchain_groq import ChatGroq
-from langchain.schema import HumanMessage, SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 
 from dotenv import load_dotenv
 load_dotenv()
+
+# Add project root to path for standalone execution
+if __name__ == "__main__":
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.retriever import get_retriever, format_context_for_llm
 
@@ -63,7 +68,7 @@ from src.retriever import get_retriever, format_context_for_llm
 # ============================================================
 
 # Groq model — free, fast, good quality
-GROQ_MODEL = "llama3-8b-8192"
+GROQ_MODEL = "llama-3.1-8b-instant"
 
 # Temperature controls randomness
 # 0 = deterministic (same question = same answer) — good for facts
@@ -142,8 +147,10 @@ RBI policies, and Indian financial markets.
 STRICT RULES YOU MUST FOLLOW:
 1. ONLY answer based on the retrieved context provided to you.
 2. ALWAYS cite your source using the format [Source N] where N is the source number.
-3. If the context does not contain enough information, say:
+3. If the context does not contain enough information and YOU HAVE NOT used web search, say:
    "I don't have sufficient information in my documents to answer this accurately."
+   If you ARE using web data because documents were insufficient, start with:
+   "I couldn't find specific details in my documents, but according to recent financial sources..."
 4. NEVER make up financial figures, ratios, or regulatory rules.
 5. ALWAYS add this disclaimer for investment-related questions:
    "⚠️ This is for informational purposes only and not financial advice. 
@@ -208,6 +215,7 @@ Please answer the question based strictly on the context above."""
 def rag_answer(
     query: str,
     retriever,
+    domain: str = "company",
     filter_company: Optional[str] = None,
     filter_type: Optional[str] = None
 ) -> dict:
@@ -227,11 +235,12 @@ def rag_answer(
         confidence : Average retrieval score (0-1)
         query      : Original question
     """
-    logger.info(f"RAG answer for: {query[:60]}")
+    logger.info(f"RAG answer for: {query[:60]} (Domain: {domain})")
 
     # Step 1: Retrieve relevant chunks
     results = retriever.search(
         query,
+        collection_name=domain,
         n_results=5,
         filter_company=filter_company,
         filter_type=filter_type
@@ -291,83 +300,75 @@ def rag_answer(
 # WEEK 6 — AGENT 1: ROUTER AGENT
 # ============================================================
 
-def router_agent(query: str) -> str:
+def router_agent(query: str) -> dict:
     """
-    WEEK 6 — Agent 1: Router
+    WEEK 6 — Agent 1: Router (UPGRADED)
     ─────────────────────────
-    Classifies the user's query and decides which tool to use.
+    Classifies the user's query into:
+    1. Route  (rag, calculator, websearch, direct)
+    2. Domain (company, sebi, rbi)
 
-    Route options:
-    - "rag"        → Standard RAG search (most queries)
-    - "calculator" → Numerical calculation needed
-    - "websearch"  → Live data / recent news needed
-    - "direct"     → Simple factual question, no retrieval needed
-
-    HOW IT CLASSIFIES:
-    Uses keyword matching first (fast, free, no LLM call).
-    Falls back to LLM classification for ambiguous queries.
-
-    Returns: string — one of "rag", "calculator", "websearch", "direct"
+    Returns: dict with 'route' and 'domain'
     """
     query_lower = query.lower().strip()
-
     logger.info(f"Router: classifying '{query_lower[:50]}'")
 
-    # ── Rule-based classification (fast path) ─────────────
-
-    # Check for live data keywords → web search
-    if any(kw in query_lower for kw in LIVE_DATA_KEYWORDS):
-        logger.info("Router → websearch (live data keyword detected)")
-        return "websearch"
-
-    # Check for calculation keywords → calculator
-    if any(kw in query_lower for kw in CALC_KEYWORDS):
-        logger.info("Router → calculator (calculation keyword detected)")
-        return "calculator"
-
-    # Greetings and meta-questions → direct LLM (no retrieval needed)
-    direct_patterns = [
-        'hello', 'hi', 'what can you do', 'help', 'who are you',
-        'what is your name', 'how are you'
-    ]
+    # ── Fast path for greetings ───────────────────────────
+    direct_patterns = ['hello', 'hi', 'what can you do', 'help', 'who are you']
     if any(p in query_lower for p in direct_patterns):
-        logger.info("Router → direct (greeting/meta)")
-        return "direct"
+        return {"route": "direct", "domain": "company"}
 
-    # Default: use RAG for everything else
-    logger.info("Router → rag (default)")
-    return "rag"
+    # ── LLM Classification ───────────────────────────────
+    router_prompt = f"""Target Categories:
+- route: [rag, calculator, websearch, direct]
+- domain: [company, sebi, rbi, tax]
+
+Definitions:
+    - 'domain': The financial area. MUST be one of:
+        * 'company' (Stock prices, company news, revenue, profits)
+        * 'sebi' (Market regulations, insider trading, listing rules, mutual fund laws)
+        * 'rbi' (Banking rules, interest rates, repo rates, KYC, digital payments)
+        * 'tax' (Income tax slabs, TDS, 80C deductions, capital gains tax, tax filing)
+    - 'query': The search query...
+
+Instructions:
+1. If the query asks for calculations (P/E, growth, total), route is 'calculator'.
+2. If it asks for live/latest news or current price, route is 'websearch'.
+3. Default route for financial questions is 'rag'.
+
+USER QUERY: {query}
+
+RESPONSE FORMAT:
+{{"route": "...", "domain": "..."}}
+"""
+    try:
+        llm = get_llm()
+        response = llm.invoke([
+            SystemMessage(content="You are a routing agent. Respond ONLY with JSON."),
+            HumanMessage(content=router_prompt)
+        ])
+        # Clean the response in case LLM adds markdown
+        clean_json = re.sub(r'```json\s*|\s*```', '', response.content).strip()
+        classification = json.loads(clean_json)
+        logger.info(f"Router → {classification}")
+        return classification
+    except Exception as e:
+        logger.warning(f"LLM routing failed: {e}. Falling back to default.")
+        return {"route": "rag", "domain": "company"}
 
 
 # ============================================================
 # WEEK 6 — AGENT 2: CALCULATOR AGENT
 # ============================================================
 
-def calculator_agent(query: str, retriever) -> dict:
+def calculator_agent(query: str, retriever, domain: str = "company") -> dict:
     """
     WEEK 6 — Agent 2: Calculator
-    ──────────────────────────────
-    Handles quantitative financial questions.
-
-    Pipeline:
-    1. Retrieve relevant chunks that contain financial numbers
-    2. Ask LLM to extract the numbers and write Python code
-    3. Execute the Python code in a sandboxed subprocess
-    4. Return the answer with the code shown (transparency)
-
-    WHY SHOW THE CODE?
-    Financial calculations must be verifiable. Showing the
-    calculation code builds trust and allows the user to
-    spot errors. This is what real fintech tools do.
-
-    SANDBOX SAFETY:
-    Code runs in a subprocess with timeout=10 seconds.
-    This prevents infinite loops from hanging the app.
     """
-    logger.info(f"Calculator agent: {query[:60]}")
+    logger.info(f"Calculator agent: {query[:60]} (Domain: {domain})")
 
     # Step 1: Get relevant context
-    results = retriever.search(query, n_results=5)
+    results = retriever.search(query, collection_name=domain, n_results=5)
     context = format_context_for_llm(results)
     avg_confidence = sum(r['score'] for r in results) / len(results) if results else 0
 
@@ -428,8 +429,8 @@ EXPLANATION: The required numerical data is not in the retrieved documents."""
     code_result = None
     extracted_code = None
 
-    # Find Python code block in the response
-    code_match = re.search(r'```python\n(.*?)```', llm_response, re.DOTALL)
+    # Find Python code block in the response (handle py/python and variations)
+    code_match = re.search(r'```(?:python|py)?\s*\n(.*?)\s*```', llm_response, re.DOTALL)
 
     if code_match:
         extracted_code = code_match.group(1).strip()
@@ -486,8 +487,9 @@ def _execute_python_safely(code: str) -> dict:
             temp_path = f.name
 
         # Run it in a subprocess with timeout
+        # sys.executable ensures we use this same Python interpreter
         proc = subprocess.run(
-            ['python', temp_path],
+            [sys.executable, temp_path],
             capture_output=True,
             text=True,
             timeout=10          # Kill after 10 seconds
@@ -527,7 +529,7 @@ def _execute_python_safely(code: str) -> dict:
 # WEEK 6 — AGENT 3: WEB SEARCH AGENT
 # ============================================================
 
-def web_search_agent(query: str, retriever) -> dict:
+def web_search_agent(query: str, retriever, domain: str = "company", is_fallback: bool = False) -> dict:
     """
     WEEK 6 — Agent 3: Web Search
     ──────────────────────────────
@@ -541,7 +543,7 @@ def web_search_agent(query: str, retriever) -> dict:
 
     Falls back to RAG-only if Tavily key is missing.
     """
-    logger.info(f"Web search agent: {query[:60]}")
+    logger.info(f"Web search agent: {query[:60]} (Domain: {domain})")
 
     tavily_key = os.environ.get('TAVILY_API_KEY')
 
@@ -588,7 +590,7 @@ def web_search_agent(query: str, retriever) -> dict:
             logger.warning(f"Tavily search failed: {e}")
 
     # ── Also get RAG context ───────────────────────────────
-    rag_results = retriever.search(query, n_results=3)
+    rag_results = retriever.search(query, collection_name=domain, n_results=3)
     rag_context = format_context_for_llm(rag_results)
     avg_confidence = sum(r['score'] for r in rag_results) / len(rag_results) if rag_results else 0
 
@@ -602,6 +604,13 @@ def web_search_agent(query: str, retriever) -> dict:
         combined_context = f"DOCUMENT DATABASE:\n{rag_context}"
         logger.info("No web data — using RAG only")
 
+    # Determine the correct instruction based on fallback state
+    fallback_prefix = (
+        "If using web data as a fallback because documents were insufficient, "
+        "start exactly with: \"I couldn't find specific details in my documents, "
+        "but according to recent financial sources...\""
+    ) if is_fallback else 'If using web data, note it as "According to recent sources..."'
+
     # ── Generate answer ────────────────────────────────────
     prompt = f"""You are an Indian financial analyst with access to both 
 live web data and a document database.
@@ -611,7 +620,7 @@ live web data and a document database.
 USER QUESTION: {query}
 
 Answer using the most recent information available. 
-If using web data, note it as "According to recent sources..."
+{fallback_prefix}
 If using document data, cite [Source N].
 Always add date context so user knows how recent the info is."""
 
@@ -639,7 +648,7 @@ Always add date context so user knows how recent the info is."""
 # MAIN ORCHESTRATOR — Combines all agents
 # ============================================================
 
-def process_query(query: str, retriever=None) -> dict:
+def process_query(query: str, retriever=None, use_web_search: bool = True) -> dict:
     """
     Main entry point called by app.py.
 
@@ -658,15 +667,24 @@ def process_query(query: str, retriever=None) -> dict:
         retriever = get_retriever()
 
     # Step 1: Route the query
-    route = router_agent(query)
-    logger.info(f"Query routed to: {route}")
+    classification = router_agent(query)
+    route  = classification.get('route', 'rag')
+    domain = classification.get('domain', 'company')
+    logger.info(f"Query routed to: {route} | Domain: {domain}")
 
     # Step 2: Process with the appropriate agent
     if route == "calculator":
-        result = calculator_agent(query, retriever)
+        result = calculator_agent(query, retriever, domain=domain)
 
-    elif route == "websearch":
-        result = web_search_agent(query, retriever)
+    elif route == "websearch" and use_web_search:
+        result = web_search_agent(query, retriever, domain=domain)
+
+    elif route == "websearch" and not use_web_search:
+        # Fallback to RAG if web search is disabled but routed
+        logger.info("Web search disabled — falling back to RAG")
+        result = rag_answer(query, retriever, domain=domain)
+        result['agent_used'] = 'rag'
+        return result
 
     elif route == "direct":
         # Simple direct LLM response — no retrieval
@@ -692,7 +710,18 @@ def process_query(query: str, retriever=None) -> dict:
 
     else:
         # Default: RAG
-        result = rag_answer(query, retriever)
+        result = rag_answer(query, retriever, domain=domain)
+        
+        # ── Fallback to Web Search ──────────────────────────
+        # If RAG confidence is low and web search is enabled
+        if result.get('confidence', 0) < 0.35 and use_web_search:
+            logger.info(f"RAG confidence low ({result['confidence']}) — falling back to Web Search")
+            web_result = web_search_agent(query, retriever, domain=domain, is_fallback=True)
+            
+            # Use web result but keep the original query info
+            result = web_result
+            result['agent_used'] = 'rag_fallback_web'
+            return result
 
     result['agent_used'] = route
     return result
@@ -707,7 +736,7 @@ if __name__ == "__main__":
 
     test_queries = [
         "What is TCS's business model?",
-        "What does SEBI say about insider trading?",
+        "What are the penalties for insider trading in India?",
         "Calculate the P/E ratio if EPS is ₹50 and share price is ₹3500",
         "What is the latest news about Reliance Industries?",
     ]
