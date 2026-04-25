@@ -54,7 +54,10 @@ RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 INITIAL_RESULTS = 10   # Fetch 10 from ChromaDB
 FINAL_RESULTS   = 5    # Return best 5 after reranking
 
-COLLECTION_NAME = "india_finance"
+COLLECTION_COMPANY = "company_data"
+COLLECTION_SEBI    = "sebi_regulations"
+COLLECTION_RBI     = "rbi_policies"
+COLLECTION_TAX     = "tax_regulations"
 
 # ── Logging ────────────────────────────────────────────────
 logging.basicConfig(
@@ -102,16 +105,43 @@ class IndiaFinanceRetriever:
 
         self.client = chromadb.PersistentClient(path=chroma_path)
 
-        try:
-            self.collection = self.client.get_collection(COLLECTION_NAME)
-        except Exception:
-            raise ValueError(
-                f"Collection '{COLLECTION_NAME}' not found. "
-                "Run ingest.py first."
-            )
+        # ── Initialize Collections ────────────────────────
+        self.collections = {}
+        
+        # Try to load each partitioned collection independently
+        domain_mapping = {
+            "company": COLLECTION_COMPANY,
+            "sebi":    COLLECTION_SEBI,
+            "rbi":     COLLECTION_RBI,
+            "tax":     "tax_regulations"
+        }
+        
+        for key, coll_name in domain_mapping.items():
+            try:
+                coll = self.client.get_collection(coll_name)
+                # Only add if it has data
+                if coll.count() > 0:
+                    self.collections[key] = coll
+            except Exception:
+                # Collection doesn't exist yet, skip it
+                pass
 
-        chunk_count = self.collection.count()
-        logger.info(f"✅ Connected to ChromaDB — {chunk_count} chunks")
+        # Legacy fallback if no partitioned collections found
+        if not self.collections:
+            try:
+                coll = self.client.get_collection("india_finance")
+                if coll.count() > 0:
+                    self.collections["company"] = coll
+                    logger.info("Connected to legacy 'india_finance' collection")
+            except Exception:
+                pass
+
+        if not self.collections:
+            logger.error("No valid collections found in ChromaDB.")
+            raise ValueError("Database not ready: No valid collections found. Run ingest.py first.")
+
+        total_chunks = sum(c.count() for c in self.collections.values())
+        logger.info(f"Connected to ChromaDB - {total_chunks} chunks across {len(self.collections)} active domains")
 
         # ── Load embedding model ───────────────────────────
         logger.info(f"Loading embedding model: {EMBEDDING_MODEL}")
@@ -138,6 +168,7 @@ class IndiaFinanceRetriever:
     def search(
         self,
         query: str,
+        collection_name: str = "company",
         n_results: int = FINAL_RESULTS,
         filter_company: Optional[str] = None,
         filter_type:    Optional[str] = None,
@@ -187,21 +218,27 @@ class IndiaFinanceRetriever:
             normalize_embeddings=True
         ).tolist()
 
-        # ── Step 3: ChromaDB vector search ────────────────
-        # Find chunks whose embeddings are closest to query embedding
-        # n_results * 2 to get extra candidates for reranker
-        fetch_n = min(INITIAL_RESULTS, self.collection.count())
+        # ── Step 3: Get correct collection ────────────────
+        collection = self.collections.get(collection_name)
+        if not collection:
+            logger.warning(f"Collection '{collection_name}' not available. Returning empty results.")
+            return []
+            
+        logger.info(f"Searching collection: {collection_name}")
+
+        # ChromaDB vector search
+        fetch_n = min(INITIAL_RESULTS, collection.count())
 
         try:
             if where_filter:
-                results = self.collection.query(
+                results = collection.query(
                     query_embeddings=[query_embedding],
                     n_results=fetch_n,
                     where=where_filter,
                     include=['documents', 'metadatas', 'distances']
                 )
             else:
-                results = self.collection.query(
+                results = collection.query(
                     query_embeddings=[query_embedding],
                     n_results=fetch_n,
                     include=['documents', 'metadatas', 'distances']
@@ -323,21 +360,22 @@ class IndiaFinanceRetriever:
     def get_db_stats(self) -> dict:
         """
         Returns statistics about what's in the database.
-        Useful for debugging and for the Streamlit dashboard.
         """
-        total = self.collection.count()
+        total = sum(c.count() for c in self.collections.values())
 
-        # Sample metadata to show what's stored
-        try:
-            sample = self.collection.get(limit=500, include=['metadatas'])
-            metas  = sample['metadatas']
+        companies = set()
+        doc_types = set()
+        sources   = set()
 
-            companies  = list({m.get('company','?') for m in metas})
-            doc_types  = list({m.get('filing_type','?') for m in metas})
-            sources    = list({m.get('data_source','?') for m in metas})
-
-        except Exception:
-            companies = doc_types = sources = ['unavailable']
+        for name, coll in self.collections.items():
+            try:
+                sample = coll.get(limit=200, include=['metadatas'])
+                for m in sample['metadatas']:
+                    companies.add(m.get('company','?'))
+                    doc_types.add(m.get('filing_type','?'))
+                    sources.add(m.get('data_source','?'))
+            except Exception:
+                pass
 
         return {
             'total_chunks': total,
@@ -361,7 +399,9 @@ def get_retriever(chroma_path: str = None, use_reranker: bool = True) -> IndiaFi
             import google.colab
             chroma_path = "/content/drive/MyDrive/Finance_RAG/finrag_db"
         except ImportError:
-            chroma_path = "./finrag_db"
+            # Get absolute path to project root
+            base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            chroma_path = os.path.join(base_dir, "finrag_db")
 
     return IndiaFinanceRetriever(chroma_path, use_reranker=use_reranker)
 
