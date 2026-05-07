@@ -392,12 +392,23 @@ for msg in st.session_state.messages:
             if msg.get('sources'):
                 with st.expander(f"📄 View {len(msg['sources'])} sources"):
                     for i, src in enumerate(msg['sources']):
+                        # Check if it's a web source or a local document
+                        is_web = src.get('url') or src.get('url_link')
+                        link_url = src.get('url') or src.get('url_link')
+                        
+                        source_title = f"Source {i+1}"
+                        if is_web:
+                            source_header = f'<a href="{link_url}" target="_blank">🌐 {source_title} (Click to visit)</a>'
+                            source_meta = f"Web Search Result | {src.get('title','?')}"
+                        else:
+                            source_header = f"📄 {source_title}"
+                            source_meta = f"{src.get('company','?')} | {src.get('filing_type','?')} | {src.get('filing_date','?')}"
+
                         st.markdown(f"""
 <div class="source-box">
-<b>Source {i+1}</b> — {src.get('company','?')} 
-| {src.get('filing_type','?')} 
-| {src.get('filing_date','?')}
-| Relevance: {src.get('score', 0):.2f}<br>
+<b>{source_header}</b><br>
+<small>{source_meta}</small><br>
+| Relevance: {src.get('score', 0):.0%}<br>
 <small>{src.get('text','')[:250]}...</small>
 </div>
 """, unsafe_allow_html=True)

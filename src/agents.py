@@ -44,6 +44,7 @@
 import os
 import re
 import json
+import math
 import logging
 import subprocess
 import tempfile
@@ -165,6 +166,25 @@ End with: Sources: [list the source numbers you used]
 """
 
 
+def normalize_confidence(score: float) -> float:
+    """
+    Normalizes raw AI logit scores into a human-readable 0-1 range.
+    Uses a Sigmoid function: 1 / (1 + exp(-score/3))
+    
+    Why?
+    - Raw scores from the reranker can range from -20 to +20.
+    - -10 (bad)     → ~3.5%
+    - 0   (neutral) → 50.0%
+    - +5  (good)    → ~84.1%
+    - +10 (perfect) → ~96.4%
+    """
+    try:
+        # Standard Sigmoid with temperature scaling (T=3)
+        return 1 / (1 + math.exp(-score / 3))
+    except OverflowError:
+        return 1.0 if score > 0 else 0.0
+
+
 def build_rag_prompt(query: str, context: str, confidence: float) -> str:
     """
     WEEK 5 — Builds the complete prompt sent to the LLM.
@@ -256,7 +276,8 @@ def rag_answer(
         }
 
     # Step 2: Calculate confidence
-    avg_confidence = sum(r['score'] for r in results) / len(results)
+    raw_avg_score = sum(r['score'] for r in results) / len(results)
+    avg_confidence = normalize_confidence(raw_avg_score)
 
     # Step 3: Format context for the LLM
     context = format_context_for_llm(results)
@@ -287,6 +308,10 @@ def rag_answer(
             "\n\n⚠️ This is for informational purposes only and not financial advice. "
             "Consult a SEBI-registered financial advisor before making investment decisions."
         )
+
+    # Normalize individual source scores for the UI
+    for r in results:
+        r['score'] = normalize_confidence(r['score'])
 
     return {
         'answer':     answer_text,
@@ -578,6 +603,7 @@ def web_search_agent(query: str, retriever, domain: str = "company", is_fallback
                 web_sources.append({
                     'title': title,
                     'url':   url,
+                    'text':  content,
                     'type':  'web_search'
                 })
 
@@ -592,7 +618,14 @@ def web_search_agent(query: str, retriever, domain: str = "company", is_fallback
     # ── Also get RAG context ───────────────────────────────
     rag_results = retriever.search(query, collection_name=domain, n_results=3)
     rag_context = format_context_for_llm(rag_results)
-    avg_confidence = sum(r['score'] for r in rag_results) / len(rag_results) if rag_results else 0
+    
+    # Normalize confidence
+    raw_avg_score = sum(r['score'] for r in rag_results) / len(rag_results) if rag_results else 0
+    avg_confidence = normalize_confidence(raw_avg_score)
+
+    # Normalize individual scores for the UI
+    for r in rag_results:
+        r['score'] = normalize_confidence(r['score'])
 
     # ── Combine web + RAG context ─────────────────────────
     if web_context:
