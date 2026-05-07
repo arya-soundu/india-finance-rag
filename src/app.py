@@ -35,8 +35,19 @@ import yfinance as yf
 # Add parent dir to path so we can import from src/
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.agents import process_query
-from src.retriever import get_retriever
+# Try different import styles for local vs colab vs streamlit-direct
+try:
+    from src.agents import process_query
+    from src.retriever import get_retriever
+except ImportError:
+    try:
+        from agents import process_query
+        from retriever import get_retriever
+    except ImportError:
+        # Fallback for some specific environments
+        sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+        from agents import process_query
+        from retriever import get_retriever
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -209,10 +220,11 @@ def format_confidence_badge(confidence: float) -> str:
 def format_agent_badge(agent: str) -> str:
     """Returns a coloured badge showing which agent answered."""
     labels = {
-        'rag':        ('RAG Search',   'badge-rag'),
-        'calculator': ('Calculator',   'badge-calculator'),
-        'websearch':  ('Web Search',   'badge-websearch'),
-        'direct':     ('Direct',       'badge-direct'),
+        'rag':              ('RAG Search',   'badge-rag'),
+        'calculator':       ('Calculator',   'badge-calculator'),
+        'websearch':        ('Web Search',   'badge-websearch'),
+        'rag_fallback_web': ('Web Fallback', 'badge-websearch'),
+        'direct':           ('Direct',       'badge-direct'),
     }
     label, css = labels.get(agent, ('Unknown', 'badge-rag'))
     return f'<span class="agent-badge {css}">{label}</span>'
@@ -402,7 +414,12 @@ for msg in st.session_state.messages:
                             source_meta = f"Web Search Result | {src.get('title','?')}"
                         else:
                             source_header = f"📄 {source_title}"
-                            source_meta = f"{src.get('company','?')} | {src.get('filing_type','?')} | {src.get('filing_date','?')}"
+                            # Build metadata string dynamically to avoid "Unknown" pipes
+                            meta_parts = []
+                            if src.get('company'): meta_parts.append(src['company'])
+                            if src.get('filing_type'): meta_parts.append(src['filing_type'])
+                            if src.get('filing_date'): meta_parts.append(src['filing_date'])
+                            source_meta = " | ".join(meta_parts) if meta_parts else "Document Source"
 
                         st.markdown(f"""
 <div class="source-box">

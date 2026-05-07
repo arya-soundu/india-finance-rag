@@ -279,6 +279,9 @@ def rag_answer(
     raw_avg_score = sum(r['score'] for r in results) / len(results)
     avg_confidence = normalize_confidence(raw_avg_score)
 
+    # Filter out extremely low relevance sources (< 15%)
+    results = [r for r in results if normalize_confidence(r['score']) >= 0.15]
+
     # Step 3: Format context for the LLM
     context = format_context_for_llm(results)
 
@@ -623,7 +626,8 @@ def web_search_agent(query: str, retriever, domain: str = "company", is_fallback
     raw_avg_score = sum(r['score'] for r in rag_results) / len(rag_results) if rag_results else 0
     avg_confidence = normalize_confidence(raw_avg_score)
 
-    # Normalize individual scores for the UI
+    # Normalize individual scores for the UI and filter low relevance
+    rag_results = [r for r in rag_results if normalize_confidence(r['score']) >= 0.15]
     for r in rag_results:
         r['score'] = normalize_confidence(r['score'])
 
@@ -669,8 +673,7 @@ Always add date context so user knows how recent the info is."""
 
     return {
         'answer':      answer_text,
-        'sources':     rag_results,
-        'web_sources': web_sources,
+        'sources':     web_sources + rag_results,
         'confidence':  round(avg_confidence, 3),
         'query':       query,
         'used_web':    bool(web_context),
