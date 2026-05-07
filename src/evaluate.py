@@ -469,12 +469,16 @@ def run_evaluation(
 
         logger.info(f"\n[{i+1}/{total}] {question[:60]}...")
 
-        # Run through RAG system
+        # Run through RAG system with category mapping
+        domain = category.split('_')[0] if '_' in category else 'company'
+        if domain not in ['company', 'sebi', 'rbi', 'tax']:
+            domain = 'company'
+
         try:
-            rag_result = rag_answer(question, retriever)
+            rag_result = rag_answer(question, retriever, domain=domain)
             answer     = rag_result.get('answer', '')
             sources    = rag_result.get('sources', [])
-            confidence = rag_result.get('confidence', 0.0)
+            confidence = float(rag_result.get('confidence', 0.0))
         except Exception as e:
             logger.error(f"RAG failed for Q{i+1}: {e}")
             answer     = f"Error: {e}"
@@ -488,10 +492,10 @@ def run_evaluation(
         context_precision  = evaluate_context_precision(question, sources)
 
         # Overall score for this question (simple average)
-        overall = round(
+        overall = float(round(
             (faithfulness + answer_relevancy + context_recall + context_precision) / 4,
             3
-        )
+        ))
 
         q_result = {
             'question':          question,
