@@ -475,7 +475,7 @@ def run_evaluation(
             domain = 'company'
 
         try:
-            rag_result = rag_answer(question, retriever, domain=domain)
+            rag_result = rag_answer(question, retriever, domain=domain, min_relevance=0.0)
             answer     = rag_result.get('answer', '')
             sources    = rag_result.get('sources', [])
             confidence = float(rag_result.get('confidence', 0.0))
@@ -626,7 +626,7 @@ if __name__ == "__main__":
 
     summary = run_evaluation()
 
-    print("\n🎉 Evaluation complete!")
+    print("\nEvaluation complete!")
     print(f"Overall score: {summary['metrics']['avg_overall']:.3f}")
     print(f"Faithfulness:  {summary['metrics']['avg_faithfulness']:.3f}")
     print(f"Relevancy:     {summary['metrics']['avg_answer_relevancy']:.3f}")

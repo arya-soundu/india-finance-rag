@@ -237,7 +237,8 @@ def rag_answer(
     retriever,
     domain: str = "company",
     filter_company: Optional[str] = None,
-    filter_type: Optional[str] = None
+    filter_type: Optional[str] = None,
+    min_relevance: float = 0.15
 ) -> dict:
     """
     WEEK 5 — Core RAG chain.
@@ -279,8 +280,9 @@ def rag_answer(
     raw_avg_score = sum(r['score'] for r in results) / len(results)
     avg_confidence = normalize_confidence(raw_avg_score)
 
-    # Filter out extremely low relevance sources (< 15%)
-    results = [r for r in results if normalize_confidence(r['score']) >= 0.15]
+    # Filter out extremely low relevance sources
+    if min_relevance > 0:
+        results = [r for r in results if normalize_confidence(r['score']) >= min_relevance]
 
     # Step 3: Format context for the LLM
     context = format_context_for_llm(results)
