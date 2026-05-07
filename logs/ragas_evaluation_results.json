@@ -1,43 +1,43 @@
 {
-  "evaluation_date": "2026-04-27T10:11:18.195375",
+  "evaluation_date": "2026-05-07T14:16:02.450269",
   "total_questions": 30,
   "metrics": {
-    "avg_faithfulness": 0.315,
+    "avg_faithfulness": 0.333,
     "avg_answer_relevancy": 0.44,
     "avg_context_recall": 0.544,
     "avg_context_precision": 0.393,
-    "avg_overall": 0.423
+    "avg_overall": 0.428
   },
   "per_category": {
-    "company_overview": {
-      "count": 6,
-      "avg_faithfulness": 0.315,
-      "avg_overall": 0.487
-    },
-    "market_structure": {
-      "count": 3,
-      "avg_faithfulness": 0.133,
-      "avg_overall": 0.15
+    "sebi_regulation": {
+      "count": 8,
+      "avg_faithfulness": 0.61,
+      "avg_overall": 0.762
     },
     "financial_concept": {
       "count": 8,
-      "avg_faithfulness": 0.197,
-      "avg_overall": 0.282
+      "avg_faithfulness": 0.19,
+      "avg_overall": 0.28
     },
-    "sebi_regulation": {
-      "count": 8,
-      "avg_faithfulness": 0.548,
-      "avg_overall": 0.747
+    "rbi_policy": {
+      "count": 2,
+      "avg_faithfulness": 0.5,
+      "avg_overall": 0.412
+    },
+    "market_structure": {
+      "count": 3,
+      "avg_faithfulness": 0.15,
+      "avg_overall": 0.154
     },
     "unanswerable": {
       "count": 3,
       "avg_faithfulness": 0.111,
       "avg_overall": 0.103
     },
-    "rbi_policy": {
-      "count": 2,
-      "avg_faithfulness": 0.438,
-      "avg_overall": 0.397
+    "company_overview": {
+      "count": 6,
+      "avg_faithfulness": 0.301,
+      "avg_overall": 0.484
     }
   },
   "per_question": [
@@ -51,46 +51,46 @@
       "context_recall": 1.0,
       "context_precision": 0.4,
       "overall_score": 0.425,
-      "retrieval_confidence": -1.9739999771118164,
+      "retrieval_confidence": 0.341,
       "num_sources": 5
     },
     {
       "question": "What is TCS known for as a company?",
       "category": "company_overview",
       "ground_truth": "TCS (Tata Consultancy Services) is one of India's largest IT services and consulting companies, providing software development, digital transformation, and business process outsourcing services.",
-      "answer": "I couldn't find specific details in my documents about what TCS is known for as a company. However, according to recent financial sources, Tata Consultancy Services Limited (TCS) is a leading IT services company that provides a wide range of services, including IT and IT-enabled services, cloud, cognitive business, consulting, cybersecurity, data and analytics, enterprise solutions, IoT and digital engineering, and sustainability services [Source 1, Source 2].\n\nFor more accurate and up-to-date i",
-      "faithfulness": 0.333,
+      "answer": "I couldn't find specific details in my documents about what TCS is known for as a company, but according to recent financial sources, Tata Consultancy Services Limited (TCS) is a leading IT services company that provides a wide range of services, including IT and IT-enabled services, across various industries. \n\nHowever, based on the provided context, it appears that TCS is known for its various platforms and services, such as TCS ADD, TCS BaNCS, TCS BFSI Platforms, TCS Chroma, TCS Customer Inte",
+      "faithfulness": 0.5,
       "answer_relevancy": 0.3,
       "context_recall": 1.0,
       "context_precision": 0.2,
-      "overall_score": 0.458,
-      "retrieval_confidence": -1.996999979019165,
+      "overall_score": 0.5,
+      "retrieval_confidence": 0.339,
       "num_sources": 5
     },
     {
       "question": "What does Infosys do?",
       "category": "company_overview",
       "ground_truth": "Infosys is a global leader in next-generation digital services and consulting, helping clients in over 50 countries navigate their digital transformation.",
-      "answer": "Infosys Limited provides consulting, technology, outsourcing, and digital services worldwide. It offers a wide range of services, including digital marketing and digital workplace, data analytics and AI, blockchain, engineering, and Internet of Things, enterprise agile DevOps, cloud, digital process automation, and quality engineering solutions, among others. It also provides solutions for various industries, such as aerospace and defense, agriculture, automotive, and more.\n\nSources: [Source 1],",
-      "faithfulness": 0.75,
+      "answer": "Infosys Limited provides consulting, technology, outsourcing, and digital services worldwide. It offers a wide range of services, including digital marketing and digital workplace, data analytics and AI, blockchain, engineering, and Internet of Things; enterprise agile DevOps, API economy and microservices, application modernization, cloud, digital process automation, digital supply chain, Microsoft business application and cloud business, service experience transformation, energy transition, Ne",
+      "faithfulness": 0.5,
       "answer_relevancy": 1.0,
       "context_recall": 1.0,
       "context_precision": 0.6,
-      "overall_score": 0.838,
-      "retrieval_confidence": 0.9779999852180481,
+      "overall_score": 0.775,
+      "retrieval_confidence": 0.581,
       "num_sources": 5
     },
     {
       "question": "What type of company is HDFC Bank?",
       "category": "company_overview",
       "ground_truth": "HDFC Bank is one of India's largest private sector banks, offering banking products and financial services.",
-      "answer": "I couldn't find specific details in my documents about the company type of HDFC Bank, but according to recent financial sources, HDFC Bank Limited is a banking company that operates in the financial services sector, specifically in the industry of Banks - Regional [Source 1, Source 4].\n\nHowever, I would like to note that the retrieved context has low relevance to this query, and I couldn't find detailed information about HDFC Bank's company type. For accurate and up-to-date information, I recomm",
+      "answer": "I couldn't find specific details in my documents about the company type of HDFC Bank, but according to recent financial sources, HDFC Bank Limited is a banking company that operates in the financial services sector, specifically in the industry of Banks - Regional [Source 1, Source 4].\n\nHowever, I would like to note that the retrieved context has low relevance to this query, and I don't have sufficient information to provide a detailed answer. For accurate and up-to-date information, I recommend",
       "faithfulness": 0.333,
       "answer_relevancy": 0.3,
       "context_recall": 1.0,
       "context_precision": 0.2,
       "overall_score": 0.458,
-      "retrieval_confidence": -2.2899999618530273,
+      "retrieval_confidence": 0.318,
       "num_sources": 5
     },
     {
@@ -103,7 +103,7 @@
       "context_recall": 1.0,
       "context_precision": 0.0,
       "overall_score": 0.408,
-      "retrieval_confidence": -5.598999977111816,
+      "retrieval_confidence": 0.134,
       "num_sources": 5
     },
     {
@@ -116,7 +116,7 @@
       "context_recall": 1.0,
       "context_precision": 0.4,
       "overall_score": 0.425,
-      "retrieval_confidence": -5.309999942779541,
+      "retrieval_confidence": 0.146,
       "num_sources": 5
     },
     {
@@ -129,33 +129,33 @@
       "context_recall": 1.0,
       "context_precision": 1.0,
       "overall_score": 0.975,
-      "retrieval_confidence": 5.316999912261963,
+      "retrieval_confidence": 0.855,
       "num_sources": 5
     },
     {
       "question": "What is insider trading according to SEBI?",
       "category": "sebi_regulation",
       "ground_truth": "According to SEBI Prohibition of Insider Trading Regulations 2015, insider trading involves trading in securities of a company by persons who have access to unpublished price-sensitive information (UPSI).",
-      "answer": "According to SEBI, insider trading refers to the act of communicating, providing, or allowing access to unpublished price sensitive information to any person, including other insiders, except where such communication is in furtherance of legitimate purposes, performance of duties, or discharge of legal obligations [Source 3].\n\nSources: [Source 1, Source 2, Source 3]",
-      "faithfulness": 0.5,
+      "answer": "Based on available filing data as of the unknown date, insider trading according to SEBI is defined as:\n\n\"Communication or procurement of unpublished price sensitive information\" [Source 3].\n\nThis means that insider trading involves the sharing or accessing of unpublished information that could influence the price of securities, which is not intended for public disclosure.\n\nSources: [Source 1], [Source 2], [Source 3], [Source 4], [Source 5]",
+      "faithfulness": 0.667,
       "answer_relevancy": 1.0,
       "context_recall": 1.0,
       "context_precision": 1.0,
-      "overall_score": 0.875,
-      "retrieval_confidence": 2.3519999980926514,
+      "overall_score": 0.917,
+      "retrieval_confidence": 0.687,
       "num_sources": 5
     },
     {
       "question": "Who is considered an insider under SEBI regulations?",
       "category": "sebi_regulation",
       "ground_truth": "Under SEBI Insider Trading Regulations, an insider is any person who is connected with the company or is in possession of unpublished price-sensitive information (UPSI) about the company.",
-      "answer": "I couldn't find specific details in my documents about who is considered an insider under SEBI regulations. However, according to recent financial sources [Source 1], SEBI has made regulations to put in place a framework for prohibition of insider trading in securities. \n\nAlthough the context provided does not explicitly define an insider, it mentions terms like \"Informant\" and \"connected persons\" [Source 2, Source 4]. However, these terms are not directly related to the definition of an insider",
+      "answer": "I couldn't find specific details in my documents about who is considered an insider under SEBI regulations. However, according to recent financial sources [Source 1], SEBI has made regulations to put in place a framework for prohibition of insider trading in securities. \n\nAlthough the context provided does not explicitly define an insider, it mentions certain terms related to insider trading, such as \"Informant\" and \"designated persons.\" However, these terms are not directly related to the defin",
       "faithfulness": 0.5,
       "answer_relevancy": 0.3,
       "context_recall": 1.0,
       "context_precision": 0.6,
       "overall_score": 0.6,
-      "retrieval_confidence": -0.24199999868869781,
+      "retrieval_confidence": 0.48,
       "num_sources": 5
     },
     {
@@ -168,20 +168,20 @@
       "context_recall": 1.0,
       "context_precision": 1.0,
       "overall_score": 0.917,
-      "retrieval_confidence": 5.427000045776367,
+      "retrieval_confidence": 0.859,
       "num_sources": 5
     },
     {
       "question": "What is a P/E ratio in stock market investing?",
       "category": "financial_concept",
       "ground_truth": "The Price-to-Earnings (P/E) ratio is a valuation metric calculated by dividing the current stock price by the earnings per share (EPS). It indicates how much investors are willing to pay per rupee of earnings.",
-      "answer": "I couldn't find specific details in my documents about the P/E ratio, but according to recent financial sources, the Price-to-Earnings (P/E) ratio is a key metric used in stock market investing to evaluate a company's stock price relative to its earnings per share (EPS). It's calculated by dividing the current market price of a stock by its EPS.\n\nIn the provided context, the P/E ratios for the listed companies are as follows:\n- Reliance Industries Limited: 22.222595\n- ICICI Bank Limited: 17.7299",
-      "faithfulness": 0.556,
+      "answer": "I couldn't find specific details in my documents about the P/E ratio, but according to recent financial sources, the Price-to-Earnings (P/E) ratio is a key metric used in stock market investing to evaluate a company's stock price relative to its earnings per share (EPS). It's calculated by dividing the current market price of a stock by its EPS.\n\nIn the context provided, the P/E ratios for the listed companies are:\n\n- Reliance Industries Limited: 22.222595\n- ICICI Bank Limited: 17.729944\n- Infos",
+      "faithfulness": 0.5,
       "answer_relevancy": 0.3,
       "context_recall": 0.0,
       "context_precision": 1.0,
-      "overall_score": 0.464,
-      "retrieval_confidence": -5.861999988555908,
+      "overall_score": 0.45,
+      "retrieval_confidence": 0.124,
       "num_sources": 5
     },
     {
@@ -194,7 +194,7 @@
       "context_recall": 0.0,
       "context_precision": 0.0,
       "overall_score": 0.075,
-      "retrieval_confidence": -9.741999626159668,
+      "retrieval_confidence": 0.037,
       "num_sources": 5
     },
     {
@@ -207,7 +207,7 @@
       "context_recall": 0.0,
       "context_precision": 1.0,
       "overall_score": 0.325,
-      "retrieval_confidence": -8.0600004196167,
+      "retrieval_confidence": 0.064,
       "num_sources": 5
     },
     {
@@ -220,7 +220,7 @@
       "context_recall": 0.5,
       "context_precision": 1.0,
       "overall_score": 0.617,
-      "retrieval_confidence": -0.9150000214576721,
+      "retrieval_confidence": 0.424,
       "num_sources": 5
     },
     {
@@ -233,7 +233,7 @@
       "context_recall": 1.0,
       "context_precision": 0.2,
       "overall_score": 0.375,
-      "retrieval_confidence": -8.076000213623047,
+      "retrieval_confidence": 0.063,
       "num_sources": 5
     },
     {
@@ -246,46 +246,46 @@
       "context_recall": 0.0,
       "context_precision": 0.0,
       "overall_score": 0.125,
-      "retrieval_confidence": -5.906000137329102,
+      "retrieval_confidence": 0.123,
       "num_sources": 5
     },
     {
       "question": "What is the difference between NSE and BSE?",
       "category": "market_structure",
       "ground_truth": "NSE (National Stock Exchange) uses the NIFTY index while BSE (Bombay Stock Exchange) uses the SENSEX index. BSE is the older exchange while NSE has higher trading volumes for equity derivatives.",
-      "answer": "I couldn't find specific details in my documents about the difference between NSE and BSE. However, according to recent financial sources, the National Stock Exchange (NSE) and the Bombay Stock Exchange (BSE) are the two major stock exchanges in India.\n\nNSE is the largest stock exchange in India by market capitalization and trading volume, while BSE is the oldest stock exchange in Asia and the second-largest stock exchange in India.\n\nFor accurate and up-to-date information, I recommend checking ",
-      "faithfulness": 0.2,
+      "answer": "I don't have sufficient information in my documents to answer this accurately. However, I can provide a general statement based on the context.\n\nNSE and BSE are mentioned in the context as stock exchange platforms, but there is no detailed information provided about their differences. For accurate and up-to-date information, I recommend checking the official websites of the National Stock Exchange (NSE) and the Bombay Stock Exchange (BSE), or consulting the Securities and Exchange Board of India",
+      "faithfulness": 0.25,
       "answer_relevancy": 0.3,
       "context_recall": 0.0,
       "context_precision": 0.0,
-      "overall_score": 0.125,
-      "retrieval_confidence": -10.402999877929688,
+      "overall_score": 0.138,
+      "retrieval_confidence": 0.03,
       "num_sources": 5
     },
     {
       "question": "What is NIFTY 50?",
       "category": "market_structure",
       "ground_truth": "NIFTY 50 is a stock market index representing 50 of the largest and most liquid Indian companies listed on the National Stock Exchange (NSE). It is used as a benchmark for the Indian equity market.",
-      "answer": "I couldn't find specific details in my documents about NIFTY 50, but according to recent financial sources, NIFTY 50 is a widely followed stock market index in India that represents the 50 largest and most liquid stocks listed on the National Stock Exchange (NSE) [Source 1]. It is considered a benchmark index for the Indian stock market and is used as a reference point for various financial products and investments.\n\nHowever, I have limited information on this topic, and I recommend checking the",
+      "answer": "I couldn't find specific details in my documents about NIFTY 50, but according to recent financial sources, NIFTY 50 is a widely followed stock market index in India that represents the 50 largest and most liquid stocks listed on the National Stock Exchange (NSE) [Source 1]. It is considered a benchmark index for the Indian stock market and is widely used by investors and analysts to gauge the overall performance of the market.\n\nHowever, I have limited information on this topic, and I recommend ",
       "faithfulness": 0.0,
       "answer_relevancy": 0.3,
       "context_recall": 0.5,
       "context_precision": 0.0,
       "overall_score": 0.2,
-      "retrieval_confidence": -10.906000137329102,
+      "retrieval_confidence": 0.026,
       "num_sources": 5
     },
     {
       "question": "What is the repo rate set by RBI?",
       "category": "rbi_policy",
       "ground_truth": "The repo rate is the rate at which the Reserve Bank of India (RBI) lends money to commercial banks. Changes in the repo rate affect borrowing costs across the economy and influence inflation.",
-      "answer": "I couldn't find specific details in my documents about the current repo rate set by RBI. However, according to recent financial sources, RBI does mention the repo rate in some of its documents. \n\nIn [Source 1], it is mentioned that a separate liquidity window of \u20b915,000 crore with tenors of up to three years at the repo rate till March 31, 2022 was opened for certain contact-intensive sectors. However, this does not provide the current repo rate.\n\nFor the most accurate and up-to-date information",
-      "faithfulness": 0.375,
+      "answer": "I couldn't find specific details in my documents about the current repo rate set by RBI. However, according to recent financial sources, RBI does mention the repo rate in some of its documents. \n\nIn [Source 1], it is mentioned that a separate liquidity window of \u20b915,000 crore with tenors of up to three years at the repo rate was opened for certain contact-intensive sectors. However, the exact repo rate is not specified.\n\nFor the most accurate and up-to-date information on the repo rate, I recomm",
+      "faithfulness": 0.5,
       "answer_relevancy": 0.3,
       "context_recall": 0.5,
       "context_precision": 0.2,
-      "overall_score": 0.344,
-      "retrieval_confidence": -7.050000190734863,
+      "overall_score": 0.375,
+      "retrieval_confidence": 0.087,
       "num_sources": 5
     },
     {
@@ -298,7 +298,7 @@
       "context_recall": 1.0,
       "context_precision": 0.0,
       "overall_score": 0.45,
-      "retrieval_confidence": -4.9720001220703125,
+      "retrieval_confidence": 0.16,
       "num_sources": 5
     },
     {
@@ -311,20 +311,20 @@
       "context_recall": 0.0,
       "context_precision": 0.0,
       "overall_score": 0.117,
-      "retrieval_confidence": -10.227999687194824,
+      "retrieval_confidence": 0.032,
       "num_sources": 5
     },
     {
       "question": "What is the secret investment strategy of TCS insiders?",
       "category": "unanswerable",
       "ground_truth": "This question cannot be answered as it asks for non-public insider information.",
-      "answer": "I couldn't find specific details in my documents about the secret investment strategy of TCS insiders. The provided context only includes information about TCS's business operations, products, and services, but does not mention any insider investment strategies.\n\nAs the context has low relevance to this query, I recommend checking official SEBI/BSE sources directly for accurate and up-to-date information on TCS's insider trading policies and investment strategies.\n\n\u26a0\ufe0f This is for informational p",
+      "answer": "I couldn't find specific details in my documents about the secret investment strategy of TCS insiders. The provided context only includes information about TCS's business segments, products, and services, but does not mention any insider investment strategies.\n\nAs the context has low relevance to this query, I recommend checking official SEBI/BSE sources directly for accurate and up-to-date information on TCS's insider trading policies and investment strategies.\n\n\u26a0\ufe0f This is for informational pur",
       "faithfulness": 0.167,
       "answer_relevancy": 0.3,
       "context_recall": 0.0,
       "context_precision": 0.0,
       "overall_score": 0.117,
-      "retrieval_confidence": -8.41100025177002,
+      "retrieval_confidence": 0.057,
       "num_sources": 5
     },
     {
@@ -337,20 +337,20 @@
       "context_recall": 0.0,
       "context_precision": 0.0,
       "overall_score": 0.075,
-      "retrieval_confidence": -10.907999992370605,
+      "retrieval_confidence": 0.026,
       "num_sources": 5
     },
     {
       "question": "How do SEBI regulations protect retail investors in India?",
       "category": "sebi_regulation",
       "ground_truth": "SEBI protects retail investors through mandatory disclosures by listed companies, prohibition of insider trading, grievance redressal mechanisms, and regulations like LODR that ensure transparency.",
-      "answer": "SEBI regulations protect retail investors in India by striking a balance between investor convenience and investor protection. For instance, the SEBI (Stock Brokers) Regulations, 1992 were amended and notified on January 17, 2023, to prescribe a framework for Execution Only Platforms for transacting in direct plans of schemes of Mutual Funds [Source 1].\n\nAdditionally, SEBI regulations require mutual fund schemes to disclose detailed information about the instruments in which the scheme intends t",
-      "faithfulness": 0.75,
+      "answer": "Based on the available filing data as of an unknown date, SEBI regulations protect retail investors in India by:\n\n1. Prescribing a framework for Execution Only Platforms for transacting in direct plans of schemes of Mutual Funds, as per the SEBI (Stock Brokers) Regulations, 1992, amended and notified on January 17, 2023 [Source 1].\n2. Requiring the disclosure of risk factors and investment restrictions in the prospectus, as per the SEBI (Mutual Funds) Regulations, 1996 [Source 3].\n3. Mandating t",
+      "faithfulness": 0.778,
       "answer_relevancy": 1.0,
       "context_recall": 0.0,
       "context_precision": 1.0,
-      "overall_score": 0.688,
-      "retrieval_confidence": 0.9869999885559082,
+      "overall_score": 0.695,
+      "retrieval_confidence": 0.582,
       "num_sources": 5
     },
     {
@@ -363,20 +363,20 @@
       "context_recall": 1.0,
       "context_precision": 0.6,
       "overall_score": 0.618,
-      "retrieval_confidence": -1.024999976158142,
+      "retrieval_confidence": 0.415,
       "num_sources": 5
     },
     {
       "question": "What is return on equity and why does it matter?",
       "category": "financial_concept",
       "ground_truth": "Return on Equity (ROE) measures a company's profitability relative to shareholder equity. A higher ROE indicates more efficient use of shareholder capital to generate profits.",
-      "answer": "I couldn't find specific details in my documents about return on equity (ROE) or its calculation. However, according to recent financial sources, ROE is a key metric used to evaluate a company's profitability by measuring its net income as a percentage of shareholder equity.\n\nROE is calculated as net income divided by shareholder equity. It indicates how efficiently a company generates profits from its shareholders' investment.\n\nWhile I couldn't find the exact ROE value for ICICI Bank Limited in",
+      "answer": "I couldn't find specific details in my documents about return on equity (ROE) or its calculation. However, according to recent financial sources, ROE is a key metric that measures a company's profitability by comparing its net income to shareholders' equity.\n\nROE is calculated as net income divided by shareholders' equity. It represents the return earned by shareholders on their investment in the company.\n\nWhile I couldn't find the exact ROE value for ICICI Bank Limited in the provided context, ",
       "faithfulness": 0.1,
       "answer_relevancy": 0.3,
       "context_recall": 0.0,
       "context_precision": 0.0,
       "overall_score": 0.1,
-      "retrieval_confidence": -11.116000175476074,
+      "retrieval_confidence": 0.024,
       "num_sources": 5
     },
     {
@@ -389,7 +389,7 @@
       "context_recall": 0.333,
       "context_precision": 0.0,
       "overall_score": 0.158,
-      "retrieval_confidence": -11.189000129699707,
+      "retrieval_confidence": 0.023,
       "num_sources": 5
     },
     {
@@ -402,33 +402,33 @@
       "context_recall": 0.5,
       "context_precision": 0.4,
       "overall_score": 0.336,
-      "retrieval_confidence": -3.513000011444092,
+      "retrieval_confidence": 0.237,
       "num_sources": 5
     },
     {
       "question": "What does profit margin indicate about a company?",
       "category": "financial_concept",
       "ground_truth": "Profit margin indicates how much profit a company makes for every rupee of revenue. Higher margins indicate better cost efficiency and pricing power.",
-      "answer": "I couldn't find specific details in my documents about the profit margin of the companies listed, but according to recent financial sources, profit margin is a key metric that indicates a company's ability to maintain its pricing power and control costs while generating revenue.\n\nProfit margin is calculated as the net income divided by revenue. A higher profit margin indicates that a company is able to retain a larger portion of its revenue as profit, which can be a sign of a company's efficienc",
+      "answer": "I couldn't find specific details in my documents about the profit margin of the companies listed, but according to recent financial sources, profit margin is a key metric that indicates a company's ability to maintain its pricing power and control costs while generating revenue.\n\nProfit margin is calculated as the net income divided by revenue, expressed as a percentage. A higher profit margin indicates that a company is able to retain a larger portion of its revenue as profit, which can be a si",
       "faithfulness": 0.25,
       "answer_relevancy": 0.3,
       "context_recall": 0.0,
       "context_precision": 0.0,
       "overall_score": 0.138,
-      "retrieval_confidence": -10.446999549865723,
+      "retrieval_confidence": 0.03,
       "num_sources": 5
     },
     {
       "question": "What is a rights issue in Indian capital markets?",
       "category": "sebi_regulation",
       "ground_truth": "A rights issue is when a company offers existing shareholders the right to buy additional shares at a discounted price. It is regulated by SEBI ICDR Regulations 2018.",
-      "answer": "A rights issue in Indian capital markets is a process where a listed issuer offers its existing shareholders the opportunity to purchase additional shares in proportion to their existing shareholding. This is typically done to raise funds for specific purposes, such as expanding the business, repaying debt, or financing new projects.\n\nAccording to the context, a rights issue is applicable to various scenarios, including:\n\n- A further public offer by a listed issuer\n- A preferential issue by a li",
-      "faithfulness": 0.5,
+      "answer": "A rights issue in Indian capital markets is a process where a listed issuer offers its existing shareholders the opportunity to purchase additional shares in proportion to their existing shareholding. This is typically done to raise funds for specific purposes, such as expanding the business, repaying debt, or financing new projects.\n\nAccording to the context, a rights issue is applicable to issuers who meet certain eligibility requirements, such as having a specified securities value of ten cro",
+      "faithfulness": 0.8,
       "answer_relevancy": 1.0,
       "context_recall": 1.0,
       "context_precision": 1.0,
-      "overall_score": 0.875,
-      "retrieval_confidence": 2.0299999713897705,
+      "overall_score": 0.95,
+      "retrieval_confidence": 0.663,
       "num_sources": 5
     }
   ]

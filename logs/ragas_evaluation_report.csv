@@ -1,31 +1,31 @@
 Question,Category,Faithfulness,Answer_Relevancy,Context_Recall,Context_Precision,Overall_Score,Confidence
-What sector does Reliance Industries operate in?,company_overview,0.0,0.3,1.0,0.4,0.425,-1.9739999771118164
-What is TCS known for as a company?,company_overview,0.333,0.3,1.0,0.2,0.458,-1.996999979019165
-What does Infosys do?,company_overview,0.75,1.0,1.0,0.6,0.838,0.9779999852180481
-What type of company is HDFC Bank?,company_overview,0.333,0.3,1.0,0.2,0.458,-2.2899999618530273
-What is ICICI Bank's primary business?,company_overview,0.333,0.3,1.0,0.0,0.408,-5.598999977111816
-What is the full form of SEBI LODR?,sebi_regulation,0.0,0.3,1.0,0.4,0.425,-5.309999942779541
-What are a listed company's disclosure requirements under SEBI?,sebi_regulation,0.9,1.0,1.0,1.0,0.975,5.316999912261963
-What is insider trading according to SEBI?,sebi_regulation,0.5,1.0,1.0,1.0,0.875,2.3519999980926514
-Who is considered an insider under SEBI regulations?,sebi_regulation,0.5,0.3,1.0,0.6,0.6,-0.24199999868869781
-What is unpublished price-sensitive information (UPSI)?,sebi_regulation,0.667,1.0,1.0,1.0,0.917,5.427000045776367
-What is a P/E ratio in stock market investing?,financial_concept,0.556,0.3,0.0,1.0,0.464,-5.861999988555908
-What does EPS mean in financial terms?,financial_concept,0.0,0.3,0.0,0.0,0.075,-9.741999626159668
-What is market capitalisation?,financial_concept,0.0,0.3,0.0,1.0,0.325,-8.0600004196167
-What is dividend yield?,financial_concept,0.667,0.3,0.5,1.0,0.617,-0.9150000214576721
-What is the debt to equity ratio?,financial_concept,0.0,0.3,1.0,0.2,0.375,-8.076000213623047
-What is NSE in India?,market_structure,0.2,0.3,0.0,0.0,0.125,-5.906000137329102
-What is the difference between NSE and BSE?,market_structure,0.2,0.3,0.0,0.0,0.125,-10.402999877929688
-What is NIFTY 50?,market_structure,0.0,0.3,0.5,0.0,0.2,-10.906000137329102
-What is the repo rate set by RBI?,rbi_policy,0.375,0.3,0.5,0.2,0.344,-7.050000190734863
-What does RBI stand for and what is its role?,rbi_policy,0.5,0.3,1.0,0.0,0.45,-4.9720001220703125
-What will be Reliance's stock price next month?,unanswerable,0.167,0.3,0.0,0.0,0.117,-10.227999687194824
-What is the secret investment strategy of TCS insiders?,unanswerable,0.167,0.3,0.0,0.0,0.117,-8.41100025177002
-What is the personal net worth of the Ambani family?,unanswerable,0.0,0.3,0.0,0.0,0.075,-10.907999992370605
-How do SEBI regulations protect retail investors in India?,sebi_regulation,0.75,1.0,0.0,1.0,0.688,0.9869999885559082
-What compliance requirements do NSE-listed companies have?,sebi_regulation,0.571,0.3,1.0,0.6,0.618,-1.024999976158142
-What is return on equity and why does it matter?,financial_concept,0.1,0.3,0.0,0.0,0.1,-11.116000175476074
-What is the significance of beta in stock analysis?,financial_concept,0.0,0.3,0.333,0.0,0.158,-11.189000129699707
-What are IT sector stocks in India?,company_overview,0.143,0.3,0.5,0.4,0.336,-3.513000011444092
-What does profit margin indicate about a company?,financial_concept,0.25,0.3,0.0,0.0,0.138,-10.446999549865723
-What is a rights issue in Indian capital markets?,sebi_regulation,0.5,1.0,1.0,1.0,0.875,2.0299999713897705
+What sector does Reliance Industries operate in?,company_overview,0.0,0.3,1.0,0.4,0.425,0.341
+What is TCS known for as a company?,company_overview,0.5,0.3,1.0,0.2,0.5,0.339
+What does Infosys do?,company_overview,0.5,1.0,1.0,0.6,0.775,0.581
+What type of company is HDFC Bank?,company_overview,0.333,0.3,1.0,0.2,0.458,0.318
+What is ICICI Bank's primary business?,company_overview,0.333,0.3,1.0,0.0,0.408,0.134
+What is the full form of SEBI LODR?,sebi_regulation,0.0,0.3,1.0,0.4,0.425,0.146
+What are a listed company's disclosure requirements under SEBI?,sebi_regulation,0.9,1.0,1.0,1.0,0.975,0.855
+What is insider trading according to SEBI?,sebi_regulation,0.667,1.0,1.0,1.0,0.917,0.687
+Who is considered an insider under SEBI regulations?,sebi_regulation,0.5,0.3,1.0,0.6,0.6,0.48
+What is unpublished price-sensitive information (UPSI)?,sebi_regulation,0.667,1.0,1.0,1.0,0.917,0.859
+What is a P/E ratio in stock market investing?,financial_concept,0.5,0.3,0.0,1.0,0.45,0.124
+What does EPS mean in financial terms?,financial_concept,0.0,0.3,0.0,0.0,0.075,0.037
+What is market capitalisation?,financial_concept,0.0,0.3,0.0,1.0,0.325,0.064
+What is dividend yield?,financial_concept,0.667,0.3,0.5,1.0,0.617,0.424
+What is the debt to equity ratio?,financial_concept,0.0,0.3,1.0,0.2,0.375,0.063
+What is NSE in India?,market_structure,0.2,0.3,0.0,0.0,0.125,0.123
+What is the difference between NSE and BSE?,market_structure,0.25,0.3,0.0,0.0,0.138,0.03
+What is NIFTY 50?,market_structure,0.0,0.3,0.5,0.0,0.2,0.026
+What is the repo rate set by RBI?,rbi_policy,0.5,0.3,0.5,0.2,0.375,0.087
+What does RBI stand for and what is its role?,rbi_policy,0.5,0.3,1.0,0.0,0.45,0.16
+What will be Reliance's stock price next month?,unanswerable,0.167,0.3,0.0,0.0,0.117,0.032
+What is the secret investment strategy of TCS insiders?,unanswerable,0.167,0.3,0.0,0.0,0.117,0.057
+What is the personal net worth of the Ambani family?,unanswerable,0.0,0.3,0.0,0.0,0.075,0.026
+How do SEBI regulations protect retail investors in India?,sebi_regulation,0.778,1.0,0.0,1.0,0.695,0.582
+What compliance requirements do NSE-listed companies have?,sebi_regulation,0.571,0.3,1.0,0.6,0.618,0.415
+What is return on equity and why does it matter?,financial_concept,0.1,0.3,0.0,0.0,0.1,0.024
+What is the significance of beta in stock analysis?,financial_concept,0.0,0.3,0.333,0.0,0.158,0.023
+What are IT sector stocks in India?,company_overview,0.143,0.3,0.5,0.4,0.336,0.237
+What does profit margin indicate about a company?,financial_concept,0.25,0.3,0.0,0.0,0.138,0.03
+What is a rights issue in Indian capital markets?,sebi_regulation,0.8,1.0,1.0,1.0,0.95,0.663
