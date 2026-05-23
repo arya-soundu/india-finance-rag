@@ -263,7 +263,9 @@ if 'messages' not in st.session_state:
 
 with st.sidebar:
     # ── Brand Identity ─────────────────────────────
-    st.image("C:/Users/sriso/.gemini/antigravity/brain/5f7bc8af-69ec-4a9b-a1a6-8e279993a0a6/vitta_mitra_growth_logo_1777125272114.png")
+    logo_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "vitta_mitra_logo.png")
+    if os.path.exists(logo_path):
+        st.image(logo_path)
     st.title("Vitta-Mitra 🇮🇳")
     st.markdown("""
     <div style="margin-top: -15px; margin-bottom: 20px;">

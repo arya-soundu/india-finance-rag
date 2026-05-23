@@ -21,13 +21,14 @@ numpy
 
 # ── PDF & Web Scraping ─────────────────────────────────────
 pdfplumber
+pymupdf
 requests
 beautifulsoup4
 lxml
 
 # ── Evaluation ─────────────────────────────────────────────
-ragas
-datasets
+# ragas
+# datasets
 
 # ── UI & API ───────────────────────────────────────────────
 streamlit
